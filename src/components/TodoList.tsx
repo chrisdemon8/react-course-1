@@ -2,36 +2,64 @@ import React, { useState } from 'react';
 import TodoListItem from './TodoListItem';
 import { v4 as uuidv4 } from 'uuid';
 import Button from '@mui/material/Button';
-import { AddCard } from '@mui/icons-material';
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
-
- 
-export default function TodoList(props: { title: string, tasks: any, setLists: any, lists: any, nameList: string }): JSX.Element {
-    const { title, tasks, setLists, lists, nameList } = props;
+import { ListsInterface } from './Todo';
 
 
-    console.log("tg", nameList);
-    const deleteCard = (id: string) => {
+export default function TodoList(props: { setLists: any, lists: ListsInterface, nameList: string }): JSX.Element {
+    const { setLists, lists, nameList } = props;
+
+
+    const deleteCard = (key: string) => {
         setLists((prevState: any) => ({
             ...prevState,
             [nameList]: {
-                title: prevState[nameList].title,
-                tasks: prevState[nameList].tasks.filter((task: { id: string; }) => {
-                    return task.id !== id
+                ...prevState[nameList],
+                tasks: prevState[nameList].tasks.filter((task: { key: string; }) => {
+                    return task.key !== key
                 })
             }
-        } 
+        }
         ));
     }
+
+
+    const modifyCard = (title: string, description: string, key: string) => {
+        console.log('test', description, title, key);
+
+        /*
+        setLists((prevState: any) => ({
+            ...prevState,
+            [nameList]: {
+                ...prevState[nameList],
+                tasks: [
+                    prevState[nameList].tasks.filter((task: { key: string; title: string; description: string }) => {
+                        if (task.key === key) {
+                            task.description = description;
+                            task.title = title;
+                            return task;
+                        } 
+                    }), ...prevState[nameList].tasks,
+                ]
+            }
+
+        }
+        ));*/
+  
+        console.log(lists)
+    }
+
+
+
 
     const addCard = () => {
         setLists((prevState: any) => ({
             ...prevState,
             [nameList]: {
-                title: prevState[nameList].title,
+                ...prevState[nameList],
                 tasks: [
                     {
-                        id: uuidv4(),
+                        key: uuidv4(),
                         title: 'carte New',
                         description: 'Description new'
                     },
@@ -42,19 +70,19 @@ export default function TodoList(props: { title: string, tasks: any, setLists: a
 
         ));
     };
- 
+
     return (
-        <div><h1>{title} <Button onClick={() => { addCard() }}>+</Button></h1>
+        <div><h1>{lists[nameList].title} <Button onClick={() => { addCard() }}>+</Button></h1>
 
             <Droppable droppableId={nameList}>
                 {(provided) => (
                     <div  {...provided.droppableProps} ref={provided.innerRef}>
-                        {tasks.map((task: { id: string; title: string; description: string; }, index: number) => {
+                        {lists[nameList].tasks.map((task: { key: string; title: string; description: string; }, index: number) => {
                             return (
-                                <Draggable key={task.id} draggableId={task.id} index={index}>
+                                <Draggable key={task.key} draggableId={task.key} index={index}>
                                     {(provided) => (
                                         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                            <TodoListItem key={task.id} title={task.title} description={task.description} deleteCard={deleteCard} id={task.id}></TodoListItem>
+                                            <TodoListItem key={task.key} task={task} title={task.title} description={task.description} deleteCard={deleteCard} modifyCard={modifyCard}  ></TodoListItem>
                                         </div>
                                     )}
                                 </Draggable>

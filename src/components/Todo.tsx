@@ -3,21 +3,21 @@ import TodoList from './TodoList';
 import { v4 as uuidv4 } from 'uuid';
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
  
-interface TaskInterface{ 
-     id : string;
+export interface TaskInterface{ 
+    key : string;
      description : string;
      title : string;
 }
 
  
-interface ListInterface{ 
-    id : string; 
+export interface ListInterface{ 
+    key : string; 
     title : string;
     tasks : TaskInterface[]; 
 }
 
 
-interface ListsInterface{ 
+export interface ListsInterface{ 
     [key : string] : ListInterface;
 }
 
@@ -27,20 +27,20 @@ export default function Todo() {
   
     const [lists, setLists] = useState<ListsInterface>({
         "todo" : {
-            id: uuidv4(), title: "à faire", tasks: [
-                { id: uuidv4(), title: "Carte 1", description: "Description 1" },
-                { id: uuidv4(), title: "Carte 2", description: "Description 2" },
-                { id: uuidv4(), title: "Carte 3", description: "Description 3" }
+            key: uuidv4(), title: "à faire", tasks: [
+                { key: uuidv4(), title: "Carte 1", description: "Description 1" },
+                { key: uuidv4(), title: "Carte 2", description: "Description 2" },
+                { key: uuidv4(), title: "Carte 3", description: "Description 3" }
             ]
         }, "progress": {
-            id: uuidv4(), title: "En cours", tasks: [
-                { id: uuidv4(), title: "Carte 1", description: "Description 1" },
-                { id: uuidv4(), title: "Carte 2", description: "Description 2" }
+            key: uuidv4(), title: "En cours", tasks: [
+                { key: uuidv4(), title: "Carte 1", description: "Description 1" },
+                { key: uuidv4(), title: "Carte 2", description: "Description 2" }
             ]
         }, "finish": {
-            id: uuidv4(), title: "Terminé", tasks: [
-                { id: uuidv4(), title: "Carte 1", description: "Description 1" },
-                { id: uuidv4(), title: "Carte 2", description: "Description 2" }
+            key: uuidv4(), title: "Terminé", tasks: [
+                { key: uuidv4(), title: "Carte 1", description: "Description 1" },
+                { key: uuidv4(), title: "Carte 2", description: "Description 2" }
             ]
         }
     });
@@ -76,7 +76,7 @@ export default function Todo() {
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-around' }}>
                 { 
                     Object.keys(lists).map(function (key: string, index: number) {  
-                        return <TodoList nameList={key} key={lists[key].id} title={lists[key].title} tasks={lists[key].tasks} setLists={setLists} lists={lists}></TodoList>
+                        return <TodoList nameList={key} key={lists[key].key}  setLists={setLists} lists={lists}></TodoList>
                     })
                 }
             </div>
