@@ -5,50 +5,64 @@ import Button from '@mui/material/Button';
 import { AddCard } from '@mui/icons-material';
 import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautiful-dnd";
 
+ 
+export default function TodoList(props: { title: string, tasks: any, setLists: any, lists: any, nameList: string }): JSX.Element {
+    const { title, tasks, setLists, lists, nameList } = props;
 
 
-export default function TodoList(props: { name: string }): JSX.Element {
-    const { name } = props;
-
-    const [tasks, setTasks] = useState([{ id: uuidv4(), title: "Carte 1", description: "Description 1" },
-    { id: uuidv4(), title: "Carte 2", description: "Description 2" },
-    { id: uuidv4(), title: "Carte 3", description: "Description 3" }]);
-
+    console.log("tg", nameList);
     const deleteCard = (id: string) => {
-        setTasks(tasks.filter(task => {
-            return task.id !== id
-        }))
+        setLists((prevState: any) => ({
+            ...prevState,
+            [nameList]: {
+                title: prevState[nameList].title,
+                tasks: prevState[nameList].tasks.filter((task: { id: string; }) => {
+                    return task.id !== id
+                })
+            }
+        } 
+        ));
     }
 
     const addCard = () => {
-        setTasks([...tasks, { id: uuidv4(), title: "carte New", description: "Description new" }]);
-    }
-
-    const onDragEnd = (result: DropResult): void => {
-        // dropped outside the list
-        if (!result.destination) {
-            return;
+        setLists((prevState: any) => ({
+            ...prevState,
+            [nameList]: {
+                title: prevState[nameList].title,
+                tasks: [
+                    {
+                        id: uuidv4(),
+                        title: 'carte New',
+                        description: 'Description new'
+                    },
+                    ...prevState[nameList].tasks
+                ],
+            }
         }
 
-        /*
-        const items: Item[] = reorder(
-          state,
-          result.source.index,
-          result.destination.index
-        );
-    
-        setState(items);*/
+        ));
     };
-
-
-
-    console.log(tasks);
-
+ 
     return (
-        <div><h1>{name} <Button onClick={() => { addCard() }}>+</Button></h1>
-            {tasks.map(function (task) {
-                return <TodoListItem key={task.id} title={task.title} description={task.description} deleteCard={deleteCard} id={task.id}></TodoListItem>
-            })
-            }
+        <div><h1>{title} <Button onClick={() => { addCard() }}>+</Button></h1>
+
+            <Droppable droppableId={nameList}>
+                {(provided) => (
+                    <div  {...provided.droppableProps} ref={provided.innerRef}>
+                        {tasks.map((task: { id: string; title: string; description: string; }, index: number) => {
+                            return (
+                                <Draggable key={task.id} draggableId={task.id} index={index}>
+                                    {(provided) => (
+                                        <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
+                                            <TodoListItem key={task.id} title={task.title} description={task.description} deleteCard={deleteCard} id={task.id}></TodoListItem>
+                                        </div>
+                                    )}
+                                </Draggable>
+                            );
+                        })}
+                        {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
         </div>);
 }
