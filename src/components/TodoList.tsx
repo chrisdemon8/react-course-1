@@ -6,8 +6,8 @@ import { DragDropContext, Droppable, Draggable, DropResult } from "react-beautif
 import { ListsInterface } from './Todo';
 
 
-export default function TodoList(props: { setLists: any, lists: ListsInterface, nameList: string }): JSX.Element {
-    const { setLists, lists, nameList } = props;
+export default function TodoList(props: { setLists: any, lists: ListsInterface, nameList: string, assignToFilter: string }): JSX.Element {
+    const { setLists, lists, nameList, assignToFilter } = props;
 
 
     const deleteCard = (key: string) => {
@@ -24,29 +24,27 @@ export default function TodoList(props: { setLists: any, lists: ListsInterface, 
     }
 
 
-    const modifyCard = (title: string, description: string, key: string) => {
-        console.log('test', description, title, key);
+    const modifyCard = (title: string, description: string, assignTo: string, status: boolean, key: string) => {
 
-        /*
         setLists((prevState: any) => ({
             ...prevState,
             [nameList]: {
                 ...prevState[nameList],
-                tasks: [
-                    prevState[nameList].tasks.filter((task: { key: string; title: string; description: string }) => {
+                tasks:
+                    prevState[nameList].tasks.map((task: { key: string; title: string; description: string, assignTo: string, status: boolean }) => {
                         if (task.key === key) {
                             task.description = description;
                             task.title = title;
-                            return task;
-                        } 
-                    }), ...prevState[nameList].tasks,
-                ]
+                            task.assignTo = assignTo;
+                            task.status = status;
+                        }
+                        return task;
+                    })
             }
 
         }
-        ));*/
-  
-        console.log(lists)
+        ));
+
     }
 
 
@@ -61,7 +59,9 @@ export default function TodoList(props: { setLists: any, lists: ListsInterface, 
                     {
                         key: uuidv4(),
                         title: 'carte New',
-                        description: 'Description new'
+                        description: 'Description new',
+                        assignTo: 'Chris',
+                        status: false,
                     },
                     ...prevState[nameList].tasks
                 ],
@@ -77,12 +77,20 @@ export default function TodoList(props: { setLists: any, lists: ListsInterface, 
             <Droppable droppableId={nameList}>
                 {(provided) => (
                     <div  {...provided.droppableProps} ref={provided.innerRef}>
-                        {lists[nameList].tasks.map((task: { key: string; title: string; description: string; }, index: number) => {
+                        {lists[nameList].tasks.filter((task: { key: string; title: string; description: string; assignTo: string; status: boolean; }, index: number) => {
+
+                            if (assignToFilter == task.assignTo || assignToFilter === '') {
+                                return task;
+                            }
+
+
+                        }).map((task: { key: string; title: string; description: string; assignTo: string; status: boolean; }, index: number) => {
+
                             return (
                                 <Draggable key={task.key} draggableId={task.key} index={index}>
                                     {(provided) => (
                                         <div ref={provided.innerRef} {...provided.draggableProps} {...provided.dragHandleProps}>
-                                            <TodoListItem key={task.key} task={task} title={task.title} description={task.description} deleteCard={deleteCard} modifyCard={modifyCard}  ></TodoListItem>
+                                            <TodoListItem key={task.key} task={task} title={task.title} description={task.description} assignTo={task.assignTo} status={task.status} deleteCard={deleteCard} modifyCard={modifyCard}  ></TodoListItem>
                                         </div>
                                     )}
                                 </Draggable>

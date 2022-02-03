@@ -1,4 +1,13 @@
-# React course 1
+# TODOLIST réalisé par Christophe PETRE 
+
+## Fonctionnalités
+
+- Ajout d'une liste
+- Ajout d'une tâche
+- Modification d'une tâche
+- Suppression d'une tâche
+- Implémentation du drag and drop
+
 
 ## Getting started
 
