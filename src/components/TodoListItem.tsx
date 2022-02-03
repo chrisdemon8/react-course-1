@@ -45,6 +45,18 @@ export default function TodoListItem({ task, title, description, assignTo, statu
         <Card sx={{ minWidth: 275, maxWidth: 350 }}>
             <CardContent>
 
+
+
+                <div style={{float : 'right'}}>
+                    {
+                        edit ?
+                            <Checkbox name='status' checked={inputValues["status"]} onChange={handleOnChangeCheckbox} color="success" />
+
+                            :
+                            <Checkbox name='status' checked={status} onChange={handleOnChangeCheckbox} color="success" disabled />
+                    }
+                </div> 
+
                 <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
                     {title}
                 </Typography>
@@ -60,7 +72,7 @@ export default function TodoListItem({ task, title, description, assignTo, statu
 
 
                 <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                    adjective
+                    Descritpion
                 </Typography>
 
                 {
@@ -104,15 +116,6 @@ export default function TodoListItem({ task, title, description, assignTo, statu
                             </Select>
                             <FormHelperText>Disabled</FormHelperText>
                         </FormControl>
-                }
-                <br></br>
-
-                {
-                    edit ?
-                        <Checkbox name='status' checked={inputValues["status"]} onChange={handleOnChangeCheckbox} color="success" />
-
-                        :
-                        <Checkbox name='status' checked={status} onChange={handleOnChangeCheckbox} color="success"  disabled/>
                 }
             </CardContent>
             <CardActions>

@@ -72,14 +72,14 @@ export default function TodoList(props: { setLists: any, lists: ListsInterface, 
     };
 
     return (
-        <div><h1>{lists[nameList].title} <Button onClick={() => { addCard() }}>+</Button></h1>
+        <div style={{ margin : '20px', width : "300px" }}><h1>{lists[nameList].title} <Button onClick={() => { addCard() }}>+</Button></h1>
 
             <Droppable droppableId={nameList}>
                 {(provided) => (
                     <div  {...provided.droppableProps} ref={provided.innerRef}>
                         {lists[nameList].tasks.filter((task: { key: string; title: string; description: string; assignTo: string; status: boolean; }, index: number) => {
 
-                            if (assignToFilter == task.assignTo || assignToFilter === '') {
+                            if (assignToFilter == task.assignTo || assignToFilter === 'Tout') {
                                 return task;
                             }
 
@@ -100,5 +100,6 @@ export default function TodoList(props: { setLists: any, lists: ListsInterface, 
                     </div>
                 )}
             </Droppable>
+            
         </div>);
 }

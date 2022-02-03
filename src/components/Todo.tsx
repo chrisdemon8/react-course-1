@@ -32,26 +32,25 @@ const style = {
     left: '50%',
     transform: 'translate(-50%, -50%)',
     width: 400,
-    bgcolor: 'background.paper',
-    border: '2px solid #000',
+    bgcolor: 'background.paper', 
     boxShadow: 24,
     p: 4,
 };
 
 export default function Todo() {
 
-    const [open, setOpen] = React.useState(false);
+    const [open, setOpen] = useState(false);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     const [inputValues, setInputValues] = useState({
-        title: "", assignTo : ""
+        title: "", assignTo: "Tout"
     });
 
     const handleOnChange = (event: { target: { name: string; value: string; }; }) => {
 
         const { name, value } = event.target;
-  
+
         setInputValues({ ...inputValues, [name]: value });
 
     };
@@ -123,34 +122,36 @@ export default function Todo() {
     };
 
 
-     
+
 
 
     return (
         <div>
 
-            <h1><Button onClick={handleOpen}  >Add list +</Button></h1>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', alignItems : 'center' }}>
+                <h2 style={{ marginRight: '30px'}}><Button onClick={handleOpen}  >Ajouter une liste +</Button></h2>
 
-            <h3>Filtre par assignation :
+                <h3>Filtre par assignation :</h3>
 
                 <FormControl sx={{ m: 1, minWidth: 120 }} >
                     <Select
                         labelId="selectAssignTo"
                         id="selectAssignTo"
-                        value={inputValues['assignTo']} 
-                        label="Age"
+                        value={inputValues['assignTo']}
+                        label="Assigné à"
                         name="assignTo"
                         onChange={handleOnChange}
                     >
-                        <MenuItem value={''}>All</MenuItem>
+                        <MenuItem value={'Tout'}>Tout</MenuItem>
                         <MenuItem value={'Chris'}>Chris</MenuItem>
                         <MenuItem value={'Laurine'}>Laurine</MenuItem>
                     </Select>
                 </FormControl>
-            </h3>
+
+            </div>
 
             <DragDropContext onDragEnd={handleDragEnd}>
-                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                <div style={{ display: 'flex', flexDirection: 'row', overflow : 'auto' }}>
                     {
                         Object.keys(lists).map(function (key: string, index: number) {
                             return <TodoList nameList={key} key={lists[key].key} setLists={setLists} assignToFilter={inputValues["assignTo"]} lists={lists}></TodoList>
@@ -169,7 +170,7 @@ export default function Todo() {
                     <Typography id="modal-modal-title" variant="h6" component="h2">
                         Ajout d'une nouvelle liste
                     </Typography>
-                    <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+                    <Typography id="modal-modal-description" sx={{ mt: 2 }} component="span">
                         <TextField onChange={handleOnChange} label="Titre de la liste" name="title" color="secondary" focused />
                     </Typography>
                     <Button onClick={() => { addList() }}>Ajouter</Button>

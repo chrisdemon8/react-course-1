@@ -3,7 +3,7 @@
 ## Fonctionnalités
 
 - Ajout d'une liste
-- Ajout d'une tâche
+- Ajout d'une tâche (il faut ajouter une tâche puis la modifier pour l'éditer la première fois)
 - Modification d'une tâche
 - Suppression d'une tâche
 - Implémentation du drag and drop
